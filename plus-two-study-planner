@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plus Two Study Planner</title>
+<style>
+:root {
+  --primary: #155e75;
+  --accent: #0e7490;
+  --bg: #f1f5f9;
+  --card: white;
+  --text: #172554;
+  --muted: #64748b;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header {
+  background: linear-gradient(130deg,#164e63,#0e7490);
+  color: white;
+  padding: 35px 20px;
+  text-align: center;
+}
+header h1 { margin: 0 0 10px; }
+header p { margin: 5px; }
+.container { max-width: 950px; margin: auto; padding: 20px; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+.card {
+  background: var(--card);
+  padding: 18px;
+  border-radius: 13px;
+  box-shadow: 0 2px 8px #0000000a;
+  margin-bottom: 15px;
+}
+.stat { font-size: 25px; font-weight: bold; }
+.muted { color: var(--muted); font-size: 13px; }
+nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 20px 0;
+}
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 15px;
+  cursor: pointer;
+  background: #e2e8f0;
+  color: #172554;
+  font-weight: bold;
+}
+button.active, .primary {
+  background: var(--primary);
+  color: white;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+.progress {
+  background: #e2e8f0;
+  height: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+.progress div {
+  height: 100%;
+  background: #16a34a;
+  width: 0;
+}
+.task {
+  display: flex;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+.task input { width: 18px; height: 18px; }
+.month-buttons {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+.subject { margin: 15px 0; }
+.subject h3 { color: var(--accent); }
+.resource {
+  display: block;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  margin: 10px 0;
+}
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  font-size: 13px;
+}
+@media(max-width:500px) {
+  .container { padding: 12px; }
+  nav button { white-space: nowrap; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Plus Two Study Planner</h1>
+  <p>Kerala DHSE | Science | Biology (PCMB)</p>
+  <p>November 5, 2026 – February 28, 2027</p>
+  <p>Study smart. Work hard. Achieve your dreams! ❤️</p>
+</header>
+
+<div class="container">
+
+<div class="stats">
+  <div class="card">
+    <div class="muted">Study duration</div>
+    <div class="stat">116 Days</div>
+  </div>
+  <div class="card">
+    <div class="muted">Daily study target</div>
+    <div class="stat">6–7 Hours</div>
+  </div>
+</div>
+
+<div class="card">
+  <b>Today's progress</b>
+  <div class="progress"><div id="bar"></div></div>
+  <p id="progressText" class="muted">0 of 7 tasks completed</p>
+</div>
+
+<nav>
+  <button class="active" onclick="showTab('routine',this)">Daily Routine</button>
+  <button onclick="showTab('chapters',this)">Chapters</button>
+  <button onclick="showTab('tracker',this)">Tracker</button>
+  <button onclick="showTab('resources',this)">Resources</button>
+</nav>
+
+<!-- DAILY ROUTINE -->
+<section id="routine" class="tab-content active">
+<div class="card">
+<h2>⏰ Daily Timetable</h2>
+<div id="routineList"></div>
+</div>
+<div class="card">
+<h3>Sunday Weekly Tests</h3>
+<p>8:00–9:00 AM — Biology</p>
+<p>9:30–10:30 AM — Physics</p>
+<p>11:00 AM–12:00 PM — Chemistry</p>
+<p>2:00–3:00 PM — Maths</p>
+<p>4:00–5:00 PM — Corrections</p>
+</div>
+</section>
+
+<!-- CHAPTER PLAN -->
+<section id="chapters" class="tab-content">
+<div class="card">
+<h2>📖 Monthly Chapter Plan</h2>
+<div class="month-buttons">
+<button class="active" onclick="showMonth('November',this)">November</button>
+<button onclick="showMonth('December',this)">December</button>
+<button onclick="showMonth('January',this)">January</button>
+<button onclick="showMonth('February',this)">February</button>
+</div>
+<div id="chapterContent"></div>
+<p class="muted">Verify chapter inclusion against the official 2026–27 Kerala DHSE syllabus.</p>
+</div>
+</section>
+
+<!-- DAILY TRACKER -->
+<section id="tracker" class="tab-content">
+<div class="card">
+<h2>✅ Daily Study Checklist</h2>
+<div id="tasks"></div>
+<button class="primary" onclick="resetTasks()">Reset Today's Tasks</button>
+</div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources" class="tab-content">
+<div class="card">
+<h2>🎥 Free Study Resources</h2>
+<a class="resource" href="https://www.youtube.com/@itsvicters" target="_blank">KITE VICTERS – Kerala Classes ↗</a>
+<a class="resource" href="https://www.hsslive.in/" target="_blank">HSSLive – Study Materials ↗</a>
+<a class="resource" href="https://ncert.nic.in/textbook.php" target="_blank">NCERT – Free Textbooks ↗</a>
+<a class="resource" href="https://www.youtube.com/results?search_query=Kerala+Plus+Two+Biology" target="_blank">Biology YouTube Classes ↗</a>
+<a class="resource" href="https://www.youtube.com/results?search_query=Kerala+Plus+Two+Physics" target="_blank">Physics YouTube Classes ↗</a>
+<a class="resource" href="https://www.youtube.com/results?search_query=Kerala+Plus+Two+Chemistry" target="_blank">Chemistry YouTube Classes ↗</a>
+<a class="resource" href="https://www.youtube.com/results?search_query=Kerala+Plus+Two+Maths" target="_blank">Maths YouTube Classes ↗</a>
+<a class="resource" href="https://www.youtube.com/results?search_query=Kerala+Plus+Two+previous+year+question+papers" target="_blank">Previous Year Question Papers ↗</a>
+</div>
+</section>
+
+</div>
+
+<footer>
+  Made with ❤️ for Plus Two students<br>
+  Keep learning. Keep growing!
+</footer>
+
+<script>
+function showTab(id,btn) {
+  document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const routine = [
+["5:30–6:00 AM","Wake up and get ready"],
+["6:00–7:00 AM","Biology – YouTube lesson"],
+["7:00–7:30 AM","Biology diagrams and recall"],
+["7:30–8:00 AM","Breakfast"],
+["School hours","School and classwork"],
+["4:30–5:30 PM","Physics"],
+["5:30–5:45 PM","Break"],
+["5:45–6:45 PM","Chemistry"],
+["6:45–7:15 PM","Rest"],
+["7:15–8:00 PM","Mathematics"],
+["8:00–8:30 PM","Dinner"],
+["8:30–9:00 PM","English / Second language"],
+["9:00–9:20 PM","Daily revision"],
+["9:30 PM","Sleep"]
+];
+
+document.getElementById("routineList").innerHTML =
+routine.map(x=>`<div class="row"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
+
+const plan = {
+November: {
+Biology:["Reproduction in Organisms","Sexual Reproduction in Flowering Plants","Human Reproduction","Reproductive Health"],
+Physics:["Electric Charges and Fields","Electrostatic Potential and Capacitance","Current Electricity","Moving Charges and Magnetism"],
+Chemistry:["Solutions","Electrochemistry","Chemical Kinetics","d- and f-Block Elements"],
+Maths:["Relations and Functions","Inverse Trigonometric Functions","Matrices","Determinants"]
+},
+December: {
+Biology:["Principles of Inheritance and Variation","Molecular Basis of Inheritance","Evolution","Human Health and Disease"],
+Physics:["Magnetism and Matter","Electromagnetic Induction","Alternating Current","Electromagnetic Waves","Ray Optics","Wave Optics"],
+Chemistry:["Coordination Compounds","Haloalkanes and Haloarenes","Alcohols, Phenols and Ethers","Aldehydes, Ketones and Carboxylic Acids"],
+Maths:["Continuity and Differentiability","Application of Derivatives","Integrals","Applications of Integrals","Differential Equations"]
+},
+January: {
+Biology:["Strategies for Enhancement in Food Production","Microbes in Human Welfare","Biotechnology: Principles and Processes","Biotechnology and its Applications","Organisms and Populations","Ecosystem","Biodiversity and Conservation","Environmental Issues"],
+Physics:["Dual Nature of Radiation and Matter","Atoms","Nuclei","Semiconductor Electronics","Full revision"],
+Chemistry:["Amines","Biomolecules","Full Chemistry revision"],
+Maths:["Vector Algebra","Three-Dimensional Geometry","Linear Programming","Probability","Full Maths revision"]
+},
+February: {
+Biology:["Botany revision","Zoology revision","Diagrams and previous-year questions"],
+Physics:["Formulas","Derivations","Numerical practice","Model papers"],
+Chemistry:["Organic reactions","Equations","Numerical practice","Model papers"],
+Maths:["Important problems","Calculus","Vectors and probability","Model papers"],
+Languages:["English revision","Second language revision"]
+}
+};
+
+function showMonth(month,btn) {
+ document.querySelectorAll('.month-buttons button').forEach(b=>b.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+ let html=`<h3>${month} 2026–27</h3>`;
+ Object.entries(plan[month]).forEach(([subject,chapters])=>{
+   html+=`<div class="subject"><h3>${subject}</h3>`;
+   chapters.forEach((chapter,i)=>{
+     html+=`<div class="row"><span>${i+1}. ${chapter}</span></div>`;
+   });
+   html+='</div>';
+ });
+ document.getElementById('chapterContent').innerHTML=html;
+}
+showMonth('November');
+
+const taskNames=[
+"Watched today's Biology lesson",
+"Revised Botany or Zoology",
+"Completed Physics lesson and problems",
+"Completed Chemistry lesson and problems",
+"Practised Maths",
+"Studied English or second language",
+"Revised today's topics for 20 minutes"
+];
+
+function todayKey(){
+ return 'plusTwoTasks-'+new Date().toISOString().slice(0,10);
+}
+function getDone(){
+ try{return JSON.parse(localStorage.getItem(todayKey())||'[]')}
+ catch(e){return []}
+}
+function updateTasks(){
+ let done=getDone();
+ document.getElementById('tasks').innerHTML=taskNames.map((t,i)=>`
+ <label class="task">
+ <input type="checkbox" ${done.includes(i)?'checked':''}
+ onchange="toggleTask(${i},this.checked)">
+ <span>${t}</span>
+ </label>`).join('');
+ document.getElementById('bar').style.width=(done.length/7*100)+'%';
+ document.getElementById('progressText').textContent=
+ done.length+' of 7 tasks completed';
+}
+function toggleTask(i,checked){
+ let done=getDone();
+ done=checked?[...new Set([...done,i])]:done.filter(x=>x!==i);
+ localStorage.setItem(todayKey(),JSON.stringify(done));
+ updateTasks();
+}
+function resetTasks(){
+ localStorage.removeItem(todayKey());
+ updateTasks();
+}
+updateTasks();
+</script>
+</body>
+</html>
